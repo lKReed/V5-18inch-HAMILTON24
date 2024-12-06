@@ -25,6 +25,12 @@ motor rightFront = motor(PORT1, true);
 motor rightBack = motor(PORT2, true);
 motor_group rightDrive = motor_group(rightFront, rightBack);
 
+motor intake = motor(PORT3, false);
+
+motor conveyer = motor(PORT4, false);
+
+motor clamp = motor(PORT5, false);
+
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -74,10 +80,8 @@ void usercontrol(void) {
 
     
     // Basic tank drive
-    leftFront.spin(forward, Controller.Axis3.position(), percent);  // Left Front Drive Code
-    leftBack.spin(forward, Controller.Axis3.position(), percent);   // Left Back Drive Code
-    rightFront.spin(forward, Controller.Axis2.position(), percent); // Right Front Drive Code
-    rightBack.spin(forward, Controller.Axis2.position(), percent);  // Right Back Drive Code
+    leftDrive.spin(forward, Controller.Axis3.position(), percent);  // Left Drive Code
+    rightDrive.spin(forward, Controller.Axis2.position(), percent); // Right Drive Code
 
     if (Controller.ButtonX.pressing()) {
       std::cout << "EMERGENCY STOP: RESET REQUIRED \n";
