@@ -17,17 +17,17 @@ competition Competition;
 // Motor and Controller definitions
 controller Controller = controller();
 
-motor leftFront = motor(PORT9, false);
-motor leftBack = motor(PORT10, false);
+motor leftFront = motor(PORT12, false);
+motor leftBack = motor(PORT19, false);
 motor_group leftDrive = motor_group(leftFront, leftBack);
 
-motor rightFront = motor(PORT1, true);
-motor rightBack = motor(PORT2, true);
+motor rightFront = motor(PORT13, true);
+motor rightBack = motor(PORT11, true);
 motor_group rightDrive = motor_group(rightFront, rightBack);
 
-motor intake = motor(PORT3, false);
+motor intake = motor(PORT2, true);
 
-motor conveyer = motor(PORT4, false);
+motor conveyer = motor(PORT20, false);
 
 motor clamp = motor(PORT5, false);
 
@@ -78,13 +78,43 @@ void usercontrol(void) {
 
   while (1) {
 
-    
     // Basic tank drive
     leftDrive.spin(forward, Controller.Axis3.position(), percent);  // Left Drive Code
     rightDrive.spin(forward, Controller.Axis2.position(), percent); // Right Drive Code
 
+    // Intake + Conveyer
+    if (Controller.ButtonL2.pressing()) {
+      std::cout << "Intake Out\n";
+      intake.spin(forward);
+      conveyer.spin(forward);
+    }
+    else if (Controller.ButtonL1.pressing()) {
+      std::cout << "Intake In\n";
+      intake.spin(reverse);
+      conveyer.spin(reverse);
+    }
+    else {
+      intake.stop();
+    }
+
+    // Conveyer
+    if (Controller.ButtonB.pressing()) {
+      std::cout << "Conveyer Down";
+      conveyer.spin(forward);
+    }
+    else if (Controller.ButtonA.pressing()) {
+      std::cout << "Conveyer Up";
+      conveyer.spin(reverse);
+    }
+    else {
+      if (Controller.ButtonL1.pressing() == false && (Controller.ButtonL2.pressing() == false)) {
+        conveyer.stop();
+      }
+    }
+
+    // Emergency Stop
     if (Controller.ButtonX.pressing()) {
-      std::cout << "EMERGENCY STOP: RESET REQUIRED \n";
+      std::cout << "EMERGENCY STOP: RESET REQUIRED\n";
       return;
     }
 
