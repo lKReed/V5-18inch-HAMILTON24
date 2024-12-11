@@ -8,6 +8,7 @@
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
 #include <iostream>
+#include <math.h>
 
 using namespace vex;
 
@@ -73,11 +74,11 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void tankDrive() {
-  int velocity2 = ((Controller.Axis2.position() * Controller.Axis2.position()) / 1000) * 100;
+  double velocity2 = (pow(abs(Controller.Axis2.position()), 1.43) / 1000) * 100;
   if (Controller.Axis2.position() < 0)
     velocity2 *= -1;
 
-  int velocity3 = ((Controller.Axis3.position() * Controller.Axis3.position()) / 1000) * 100;
+  double velocity3 = (pow(abs(Controller.Axis2.position()), 1.43) / 1000) * 100;
   if (Controller.Axis3.position() < 0)
     velocity3 *= -1;
 
