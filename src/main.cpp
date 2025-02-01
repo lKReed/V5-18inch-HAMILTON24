@@ -46,8 +46,8 @@ void pre_auton(void) {
 
   std::cout << "IN PRE-AUTO\n";
 
-  intake.setVelocity(70, rpm);
-  conveyer.setVelocity(70, rpm);
+  intake.setVelocity(95, rpm);
+  conveyer.setVelocity(95, rpm);
 
 }
 
