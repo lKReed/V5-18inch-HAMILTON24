@@ -76,17 +76,33 @@ void autonomous(void) {
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-void tankDrive() {
+// Axis 2 forward/backwards
+// Axis 4 left/right
+void alexDrive() {
+  // velocity formula for exponential speed instead of linear speed
   double velocity2 = (pow(abs(Controller.Axis2.position()), 1.43) / 1000) * 100;
   if (Controller.Axis2.position() < 0)
     velocity2 *= -1;
 
-  double velocity3 = (pow(abs(Controller.Axis3.position()), 1.43) / 1000) * 100;
-  if (Controller.Axis3.position() < 0)
-    velocity3 *= -1;
+  double leftVelocity = velocity2;
+  double rightVelocity = velocity2;
 
-  leftDrive.spin(forward, velocity3, percent);  // Left Drive Code
-  rightDrive.spin(forward, velocity2, percent);  // Right Drive Code
+  double velocity4 = (pow(abs(Controller.Axis4.position()), 1.43) / 1000) * 100;
+  if (Controller.Axis4.position() < 0)
+    velocity4 *= -1;
+
+  // subtract (and add) the value of left/right velocity from the opposite wheel to turn
+  if (velocity4 > 0) {
+    rightVelocity -= abs(velocity4);
+    leftVelocity += abs(velocity4);
+  }
+  else if (velocity4 < 0) {
+    leftVelocity -= abs(velocity4);
+    rightVelocity += abs(velocity4);
+  }
+
+  leftDrive.spin(forward, leftVelocity, percent);
+  rightDrive.spin(forward, rightVelocity, percent);
 }
 
 void usercontrol(void) {
@@ -96,7 +112,7 @@ void usercontrol(void) {
   while (1) {
 
     // Drive Code
-    tankDrive();
+    alexDrive();
 
     // Intake + Conveyer
     if (Controller.ButtonL1.pressing()) {
