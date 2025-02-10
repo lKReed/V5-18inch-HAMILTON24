@@ -30,7 +30,7 @@ motor intake = motor(PORT2, true);
 
 motor conveyer = motor(PORT20, false);
 
-motor clamp = motor(PORT14, false);
+motor pusher = motor(PORT14, false);
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -48,6 +48,7 @@ void pre_auton(void) {
 
   intake.setVelocity(95, rpm);
   conveyer.setVelocity(95, rpm);
+  pusher.setVelocity(60, rpm);
 
 }
 
@@ -129,14 +130,17 @@ void usercontrol(void) {
       intake.stop();
     }
 
-  // Clamp
+  // Pusher
     if (Controller.ButtonR1.pressing()) {
-      std::cout << "Clamp Down\n";
-      clamp.spin(reverse);
+      std::cout << "Pusher Down\n";
+      pusher.spin(reverse);
     }
     else if (Controller.ButtonR2.pressing()) {
-      std::cout << "Clamp Up\n";
-      clamp.spin(forward);
+      std::cout << "Pusher Up\n";
+      pusher.spin(forward);
+    }
+    else {
+      pusher.stop();
     }
 
   // Forward
