@@ -81,25 +81,25 @@ void autonomous(void) {
 // Axis 1 left/right
 void alexDrive() {
   // velocity formula for exponential speed instead of linear speed
-  double velocity2 = (pow(abs(Controller.Axis3.position()), 1.43) / 1000) * 100;
+  double sideVelocity = (pow(abs(Controller.Axis3.position()), 1.4) / 1000) * 100;
   if (Controller.Axis3.position() < 0)
-    velocity2 *= -1;
+    sideVelocity *= -1;
 
-  double leftVelocity = velocity2;
-  double rightVelocity = velocity2;
+  double leftVelocity = sideVelocity;
+  double rightVelocity = sideVelocity;
 
-  double velocity4 = (pow(abs(Controller.Axis1.position()), 1.43) / 1000) * 100;
+  double forwardVelocity = (pow(abs(Controller.Axis1.position()), 1.4) / 1000) * 100;
   if (Controller.Axis1.position() < 0)
-    velocity4 *= -1;
+    forwardVelocity *= -1;
 
   // subtract (and add) the value of left/right velocity from the opposite wheel to turn
-  if (velocity4 > 0) {
-    rightVelocity -= abs(velocity4);
-    leftVelocity += abs(velocity4);
+  if (forwardVelocity > 0) {
+    rightVelocity -= abs(forwardVelocity);
+    leftVelocity += abs(forwardVelocity);
   }
-  else if (velocity4 < 0) {
-    leftVelocity -= abs(velocity4);
-    rightVelocity += abs(velocity4);
+  else if (forwardVelocity < 0) {
+    leftVelocity -= abs(forwardVelocity);
+    rightVelocity += abs(forwardVelocity);
   }
 
   leftDrive.spin(forward, leftVelocity, percent);
@@ -116,12 +116,12 @@ void usercontrol(void) {
     alexDrive();
 
     // Intake + Conveyer
-    if (Controller.ButtonL1.pressing()) {
+    if (Controller.ButtonR1.pressing()) {
       std::cout << "Intake In\n";
       intake.spin(forward);
       conveyer.spin(forward);
     }
-    else if (Controller.ButtonL2.pressing()) {
+    else if (Controller.ButtonR2.pressing()) {
       std::cout << "Intake Out\n";
       intake.spin(reverse);
       conveyer.spin(reverse);
@@ -131,11 +131,11 @@ void usercontrol(void) {
     }
 
   // Pusher
-    if (Controller.ButtonR1.pressing()) {
+    if (Controller.ButtonL1.pressing()) {
       std::cout << "Pusher Down\n";
       pusher.spin(reverse);
     }
-    else if (Controller.ButtonR2.pressing()) {
+    else if (Controller.ButtonL2.pressing()) {
       std::cout << "Pusher Up\n";
       pusher.spin(forward);
     }
@@ -160,7 +160,7 @@ void usercontrol(void) {
       conveyer.spin(reverse);
     }
     else {
-      if (Controller.ButtonL1.pressing() == false && (Controller.ButtonL2.pressing() == false)) {
+      if (Controller.ButtonR1.pressing() == false && (Controller.ButtonR2.pressing() == false)) {
         conveyer.stop();
       }
     }
