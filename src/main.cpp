@@ -77,19 +77,19 @@ void autonomous(void) {
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-// Axis 2 forward/backwards
-// Axis 4 left/right
+// Axis 3 forward/backwards
+// Axis 1 left/right
 void alexDrive() {
   // velocity formula for exponential speed instead of linear speed
-  double velocity2 = (pow(abs(Controller.Axis2.position()), 1.43) / 1000) * 100;
-  if (Controller.Axis2.position() < 0)
+  double velocity2 = (pow(abs(Controller.Axis3.position()), 1.43) / 1000) * 100;
+  if (Controller.Axis3.position() < 0)
     velocity2 *= -1;
 
   double leftVelocity = velocity2;
   double rightVelocity = velocity2;
 
-  double velocity4 = (pow(abs(Controller.Axis4.position()), 1.43) / 1000) * 100;
-  if (Controller.Axis4.position() < 0)
+  double velocity4 = (pow(abs(Controller.Axis1.position()), 1.43) / 1000) * 100;
+  if (Controller.Axis1.position() < 0)
     velocity4 *= -1;
 
   // subtract (and add) the value of left/right velocity from the opposite wheel to turn
