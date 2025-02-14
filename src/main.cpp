@@ -18,12 +18,12 @@ competition Competition;
 // Motor and Controller definitions
 controller Controller = controller();
 
-motor leftFront = motor(PORT12, false);
-motor leftBack = motor(PORT19, false);
+motor leftFront = motor(PORT12, true);
+motor leftBack = motor(PORT19, true);
 motor_group leftDrive = motor_group(leftFront, leftBack);
 
-motor rightFront = motor(PORT13, true);
-motor rightBack = motor(PORT11, true);
+motor rightFront = motor(PORT13, false);
+motor rightBack = motor(PORT11, false);
 motor_group rightDrive = motor_group(rightFront, rightBack);
 
 motor intake = motor(PORT2, true);
@@ -89,7 +89,7 @@ void alexDrive() {
   double rightVelocity = sideVelocity;
 
   double forwardVelocity = (pow(abs(Controller.Axis1.position()), 1.4) / 1000) * 100;
-  if (Controller.Axis1.position() < 0)
+  if (Controller.Axis1.position() > 0)
     forwardVelocity *= -1;
 
   // subtract (and add) the value of left/right velocity from the opposite wheel to turn
