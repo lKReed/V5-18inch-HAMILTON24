@@ -27,10 +27,10 @@ motor rightBack = motor(PORT11, false);
 motor_group rightDrive = motor_group(rightFront, rightBack);
 
 motor intake = motor(PORT2, true);
-
 motor conveyer = motor(PORT20, false);
+// motor pusher = motor(PORT14, false);
 
-motor pusher = motor(PORT14, false);
+inertial Inertial = inertial(PORT14);
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -48,8 +48,10 @@ void pre_auton(void) {
 
   intake.setVelocity(95, rpm);
   conveyer.setVelocity(95, rpm);
-  pusher.setVelocity(60, rpm);
+  // pusher.setVelocity(60, rpm);
+  Inertial.calibrate();
 
+  return;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -131,17 +133,17 @@ void usercontrol(void) {
     }
 
   // Pusher
-    if (Controller.ButtonL1.pressing()) {
-      std::cout << "Pusher Down\n";
-      pusher.spin(reverse);
-    }
-    else if (Controller.ButtonL2.pressing()) {
-      std::cout << "Pusher Up\n";
-      pusher.spin(forward);
-    }
-    else {
-      pusher.stop();
-    }
+    // if (Controller.ButtonL1.pressing()) {
+    //   std::cout << "Pusher Down\n";
+    //   pusher.spin(reverse);
+    // }
+    // else if (Controller.ButtonL2.pressing()) {
+    //   std::cout << "Pusher Up\n";
+    //   pusher.spin(forward);
+    // }
+    // else {
+    //   pusher.stop();
+    // }
 
   // Forward
   if (Controller.ButtonUp.pressing()) {
@@ -164,6 +166,9 @@ void usercontrol(void) {
         conveyer.stop();
       }
     }
+
+    double test = Inertial.rotation(degrees);
+    std::cout << test << std::endl;
 
     // Emergency Stop
     if (Controller.ButtonX.pressing()) {
