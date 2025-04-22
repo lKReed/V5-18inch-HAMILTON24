@@ -28,7 +28,7 @@ motor_group rightDrive = motor_group(rightFront, rightBack);
 
 motor intake = motor(PORT2, true);
 motor conveyer = motor(PORT20, false);
-// motor pusher = motor(PORT14, false);
+motor pusher = motor(PORT14, false);
 
 inertial Inertial = inertial(PORT14);
 
@@ -133,17 +133,17 @@ void usercontrol(void) {
     }
 
   // Pusher
-    // if (Controller.ButtonL1.pressing()) {
-    //   std::cout << "Pusher Down\n";
-    //   pusher.spin(reverse);
-    // }
-    // else if (Controller.ButtonL2.pressing()) {
-    //   std::cout << "Pusher Up\n";
-    //   pusher.spin(forward);
-    // }
-    // else {
-    //   pusher.stop();
-    // }
+    if (Controller.ButtonL1.pressing()) {
+      std::cout << "Pusher Down\n";
+      pusher.spin(reverse);
+    }
+    else if (Controller.ButtonL2.pressing()) {
+      std::cout << "Pusher Up\n";
+      pusher.spin(forward);
+    }
+    else {
+      pusher.stop();
+    }
 
   // Forward
   if (Controller.ButtonUp.pressing()) {
