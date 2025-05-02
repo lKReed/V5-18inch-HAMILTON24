@@ -18,12 +18,12 @@ competition Competition;
 // Motor and Controller definitions
 controller Controller = controller();
 
-motor leftFront = motor(PORT12, true);
-motor leftBack = motor(PORT19, true);
+motor leftFront = motor(PORT11, true);
+motor leftBack = motor(PORT13, true);
 motor_group leftDrive = motor_group(leftFront, leftBack);
 
-motor rightFront = motor(PORT13, false);
-motor rightBack = motor(PORT11, false);
+motor rightFront = motor(PORT19, false);
+motor rightBack = motor(PORT12, false);
 motor_group rightDrive = motor_group(rightFront, rightBack);
 
 motor intake = motor(PORT2, true);
@@ -81,7 +81,7 @@ void autonomous(void) {
 
 // Axis 3 forward/backwards
 // Axis 1 left/right
-void alexDrive() {
+void alexDrive(bool & drive_reverse) {
   // velocity formula for exponential speed instead of linear speed
   double sideVelocity = (pow(abs(Controller.Axis3.position()), 1.4) / 1000) * 100;
   if (Controller.Axis3.position() < 0)
@@ -103,19 +103,36 @@ void alexDrive() {
     leftVelocity -= abs(forwardVelocity);
     rightVelocity += abs(forwardVelocity);
   }
+  // Reverse drive direction
+    if (Controller.ButtonUp.pressing()) {
+      drive_reverse = !drive_reverse;
 
-  leftDrive.spin(forward, leftVelocity, percent);
-  rightDrive.spin(forward, rightVelocity, percent);
+      while(Controller.ButtonUp.pressing())
+        task::sleep(10);
+    }
+
+  if (drive_reverse) {
+    leftDrive.spin(forward, leftVelocity, percent);
+    rightDrive.spin(forward, rightVelocity, percent);
+  }
+  else {
+    leftDrive.spin(reverse, leftVelocity, percent);
+    rightDrive.spin(reverse, rightVelocity, percent);
+  }
+  
 }
 
 void usercontrol(void) {
   // User control code here, inside the loop
   std::cout << "\nIN TELEOP\n\n";
 
+  // initialize reverse drive
+  bool drive_reverse = false;
+
   while (1) {
 
     // Drive Code
-    alexDrive();
+    alexDrive(drive_reverse);
 
     // Intake + Conveyer
     if (Controller.ButtonR1.pressing()) {
@@ -167,8 +184,8 @@ void usercontrol(void) {
       }
     }
 
-    double test = Inertial.rotation(degrees);
-    std::cout << test << std::endl;
+    // double test = Inertial.rotation(degrees);
+    // std::cout << test << std::endl;
 
     // Emergency Stop
     if (Controller.ButtonX.pressing()) {
